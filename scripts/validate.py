@@ -14,6 +14,29 @@ REGIONS = {"東北亞", "東南亞", "歐洲", "北美洲", "大洋洲", "其他
 QUICK_FACT_KEYS = ["currency", "language", "time_diff", "flight_time", "best_season", "plug"]
 
 errors = []
+CJK = r"[\u4e00-\u9fff]"
+
+
+def contrast_with_white(hex_color):
+    """WCAG 對比度：白字放在主題色上的可讀性"""
+    def ch(c):
+        c = c / 255
+        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    r, g, b = (int(hex_color[i:i + 2], 16) for i in (1, 3, 5))
+    lum = 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(b)
+    return 1.05 / (lum + 0.05)
+
+
+def walk_strings(obj, path=""):
+    """列出 JSON 裡所有文字欄位，用來做全文檢查"""
+    if isinstance(obj, str):
+        yield path, obj
+    elif isinstance(obj, dict):
+        for k, v in obj.items():
+            yield from walk_strings(v, f"{path}.{k}" if path else k)
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            yield from walk_strings(v, f"{path}[{i}]")
 
 
 def err(city, msg):
@@ -61,8 +84,24 @@ def check_city(cid):
     need_str(cid, data, "intro", min_len=60, max_len=150)
     if data.get("region") not in REGIONS:
         err(cid, f"region 必須是 {sorted(REGIONS)} 其中之一")
-    if not re.fullmatch(r"#[0-9a-fA-F]{6}", str(data.get("theme_color", ""))):
+    color = str(data.get("theme_color", ""))
+    if not re.fullmatch(r"#[0-9a-fA-F]{6}", color):
         err(cid, "theme_color 必須是 #RRGGBB 格式")
+    elif contrast_with_white(color) < 3:
+        err(cid, f"theme_color {color} 太亮，白字對比度只有 {contrast_with_white(color):.2f}，至少要 3")
+    if len(str(data.get("emoji", ""))) > 4 or re.search(r"[\w\s]", str(data.get("emoji", ""))):
+        err(cid, "emoji 只能放一個 emoji，不能有文字")
+    if str(data.get("tagline", "")).endswith(("。", "！", ".")):
+        err(cid, "tagline 結尾不要加標點")
+
+    # 全文檢查：不能有 HTML、網址，數字和中文之間要有半形空格
+    for path_, text in walk_strings(data):
+        if re.search(r"<[a-zA-Z/]", text):
+            err(cid, f"{path_} 不能包含 HTML 標籤")
+        if re.search(r"https?://|www\.", text):
+            err(cid, f"{path_} 不能包含網址")
+        if path_ not in ("id", "updated", "theme_color") and re.search(rf"{CJK}\d|\d{CJK}", text):
+            err(cid, f"{path_} 數字和中文之間要加半形空格：{text[:30]}")
 
     qf = data.get("quick_facts", {})
     for k in QUICK_FACT_KEYS:
@@ -94,7 +133,7 @@ def check_city(cid):
         for i, d in enumerate(it, 1):
             if d.get("day") != i:
                 err(cid, f"itinerary 第 {i} 項的 day 必須是 {i}")
-            need_str(cid, d, "title", where=f"itinerary[{i-1}].")
+            need_str(cid, d, "title", where=f"itinerary[{i-1}].", min_len=2, max_len=8)
             if not isinstance(d.get("plan"), list) or not (2 <= len(d["plan"]) <= 5):
                 err(cid, f"itinerary 第 {i} 天的 plan 需要 2 到 5 項")
 
@@ -120,6 +159,14 @@ def main():
     for f in CITY_DIR.glob("*.json"):
         if f.stem not in registry:
             errors.append(f"[{f.stem}] 有資料檔但沒有登記在 data/cities.json")
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for cid in registry:
+        f = CITY_DIR / f"{cid}.json"
+        if f.exists():
+            name = json.loads(f.read_text(encoding="utf-8")).get("name", "")
+            if f" {name} |" not in readme:
+                errors.append(f"[{cid}] README.md 的已收錄城市表格缺少 {name}")
 
     if errors:
         print(f"❌ 發現 {len(errors)} 個問題：")
