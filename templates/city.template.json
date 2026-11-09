@@ -1,0 +1,62 @@
+{
+  "id": "城市英文小寫代號，需和檔名相同，例如 kyoto",
+  "name": "城市中文名稱",
+  "name_en": "城市英文名稱",
+  "country": "國家中文名稱",
+  "region": "東北亞、東南亞、歐洲、北美洲、大洋洲、其他 擇一",
+  "emoji": "代表這個城市的一個 emoji",
+  "theme_color": "#六位數色碼，和其他城市不要重複",
+  "tagline": "一句話介紹，30 字以內",
+  "intro": "兩到三句城市介紹，60 到 150 字",
+  "quick_facts": {
+    "currency": "貨幣中文名稱加 ISO 代碼",
+    "language": "語言",
+    "time_diff": "比台北快或慢幾小時",
+    "flight_time": "從台北出發的飛行時間",
+    "best_season": "最佳旅遊季節",
+    "plug": "插頭型式與電壓"
+  },
+  "spots": [
+    {
+      "name": "景點名稱",
+      "area": "所在區域",
+      "desc": "一句介紹",
+      "tip": "一句實用小提醒"
+    }
+  ],
+  "food": [
+    {
+      "name": "美食名稱",
+      "desc": "一句介紹",
+      "where": "推薦去哪裡吃"
+    }
+  ],
+  "transport": {
+    "airport": "機場到市區的方式",
+    "city": "市區主要交通",
+    "pass": "推薦的交通卡或票券"
+  },
+  "budget": {
+    "per_day_twd": {
+      "save": 0,
+      "standard": 0,
+      "comfort": 0
+    },
+    "notes": "預算補充說明，開頭固定寫 不含機票。"
+  },
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "當天主題，四到六字",
+      "plan": [
+        "行程項目 1",
+        "行程項目 2",
+        "行程項目 3"
+      ]
+    }
+  ],
+  "tips": [
+    "旅遊小提醒"
+  ],
+  "updated": "YYYY-MM"
+}

@@ -1,0 +1,141 @@
+/* ===== 設計變數：全站顏色與字體只在這裡定義 ===== */
+:root {
+  --paper: #f6f1e7;
+  --card: #fffdf8;
+  --ink: #1f2a37;
+  --muted: #6b7280;
+  --line: #e4dccb;
+  --accent: #d1495b;          /* 城市頁會用 theme_color 覆蓋 */
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(31, 42, 55, .06), 0 8px 24px rgba(31, 42, 55, .06);
+  --serif: "Noto Serif TC", serif;
+  --sans: "Noto Sans TC", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.75;
+}
+a { color: inherit; }
+.container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+/* ===== 頁首與頁尾 ===== */
+.site-header { border-bottom: 1px dashed var(--line); }
+.site-header .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.logo { font-family: var(--serif); font-weight: 700; font-size: 1.15rem; text-decoration: none; letter-spacing: .05em; }
+.logo span { color: var(--accent); }
+.nav a { text-decoration: none; color: var(--muted); margin-left: 20px; font-size: .95rem; }
+.nav a:hover { color: var(--ink); }
+.site-footer { margin-top: 80px; padding: 32px 0; border-top: 1px dashed var(--line); color: var(--muted); font-size: .85rem; text-align: center; }
+
+/* ===== 首頁 ===== */
+.hero { padding: 72px 0 40px; }
+.eyebrow { font-size: .8rem; letter-spacing: .25em; color: var(--accent); font-weight: 700; }
+.hero h1 { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.25; margin: 8px 0 16px; }
+.hero p { color: var(--muted); max-width: 560px; margin: 0; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 32px 0 24px; }
+.chip {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  padding: 6px 16px; border-radius: 999px; font: inherit; font-size: .9rem; cursor: pointer;
+}
+.chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+/* 城市卡片：登機證造型 */
+.ticket {
+  --accent: #999;
+  display: flex; flex-direction: column; text-decoration: none;
+  background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+  border-top: 6px solid var(--accent); overflow: hidden; transition: transform .2s ease;
+}
+.ticket:hover { transform: translateY(-4px); }
+.ticket-main { padding: 20px 22px 16px; }
+.ticket-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.ticket-code { font-size: .75rem; letter-spacing: .2em; color: var(--muted); }
+.ticket-emoji { font-size: 2rem; line-height: 1; }
+.ticket h2 { font-family: var(--serif); font-size: 1.7rem; margin: 6px 0 0; }
+.ticket h2 small { font-family: var(--sans); font-size: .85rem; color: var(--muted); font-weight: 400; margin-left: 8px; }
+.ticket p { margin: 8px 0 0; color: var(--muted); font-size: .92rem; }
+.ticket-stub {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  padding: 12px 22px 16px; border-top: 2px dashed var(--line); margin-top: auto;
+}
+.stub-label { display: block; font-size: .7rem; color: var(--muted); letter-spacing: .1em; }
+.stub-value { font-weight: 700; font-size: .9rem; }
+
+/* ===== 城市頁 ===== */
+.city-hero { background: var(--accent); color: #fff; padding: 56px 0 48px; }
+.back { color: rgba(255,255,255,.85); text-decoration: none; font-size: .9rem; }
+.back:hover { color: #fff; }
+.city-hero .emoji { font-size: 3rem; display: block; margin-top: 16px; }
+.city-hero h1 { font-family: var(--serif); font-size: clamp(2.2rem, 6vw, 3.6rem); margin: 4px 0 0; line-height: 1.2; }
+.city-hero h1 small { font-family: var(--sans); font-size: 1rem; font-weight: 400; opacity: .85; margin-left: 12px; }
+.city-hero .tagline { font-size: 1.15rem; opacity: .95; margin: 8px 0 0; }
+
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: -28px; }
+.fact { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 16px; }
+.fact-label { font-size: .75rem; color: var(--muted); letter-spacing: .1em; }
+.fact-value { font-weight: 500; font-size: .92rem; line-height: 1.5; }
+
+.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 32px 0 0; }
+.toc a { text-decoration: none; font-size: .88rem; padding: 4px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
+.toc a:hover { border-color: var(--accent); color: var(--accent); }
+
+.section { margin-top: 56px; scroll-margin-top: 16px; }
+.section h2 { font-family: var(--serif); font-size: 1.6rem; margin: 0 0 20px; display: flex; align-items: center; gap: 10px; }
+.section h2::before { content: ""; width: 6px; height: 1.2em; background: var(--accent); border-radius: 3px; }
+.intro { font-size: 1.05rem; max-width: 760px; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; }
+.card h3 { margin: 0; font-size: 1.1rem; }
+.card .area { font-size: .78rem; color: var(--accent); font-weight: 700; letter-spacing: .05em; }
+.card p { margin: 8px 0 0; font-size: .93rem; }
+.card .tip { margin-top: 12px; padding: 8px 12px; background: var(--paper); border-radius: 8px; font-size: .86rem; color: var(--muted); }
+
+.food-list { display: grid; gap: 12px; }
+.food { display: grid; grid-template-columns: 160px 1fr; gap: 16px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 20px; }
+.food h3 { margin: 0; font-size: 1.05rem; }
+.food p { margin: 0; font-size: .93rem; }
+.food .where { font-size: .82rem; color: var(--muted); margin-top: 4px; }
+
+.transport { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.transport .card h3 { font-size: 1rem; color: var(--accent); }
+
+.budget { display: grid; gap: 14px; max-width: 720px; }
+.budget-row { display: grid; grid-template-columns: 70px 1fr 120px; align-items: center; gap: 12px; }
+.budget-bar { height: 14px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.budget-bar span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+.budget-value { font-weight: 700; text-align: right; }
+.budget-notes { color: var(--muted); font-size: .9rem; margin-top: 8px; }
+
+.timeline { display: grid; gap: 16px; }
+.day { display: grid; grid-template-columns: 90px 1fr; gap: 16px; }
+.day-num { font-family: var(--serif); font-weight: 700; color: var(--accent); font-size: 1.1rem; padding-top: 16px; }
+.day .card h3 { margin-bottom: 8px; }
+.day ol { margin: 0; padding-left: 1.3em; }
+
+.tips { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; max-width: 760px; }
+.tips li { background: var(--card); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 10px 16px; box-shadow: var(--shadow); }
+
+.pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; }
+.pager a { text-decoration: none; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 20px; flex: 1; }
+.pager a:last-child { text-align: right; }
+.pager small { display: block; color: var(--muted); font-size: .78rem; }
+
+.notice { text-align: center; padding: 80px 0; color: var(--muted); }
+
+@media (max-width: 600px) {
+  .food { grid-template-columns: 1fr; gap: 4px; }
+  .day { grid-template-columns: 1fr; gap: 0; }
+  .day-num { padding-top: 0; }
+  .budget-row { grid-template-columns: 56px 1fr 96px; }
+  .nav a { margin-left: 12px; }
+}
